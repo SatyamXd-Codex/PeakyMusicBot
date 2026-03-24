@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+*.spec
+
+# Virtual environments
+venv/
+env/
+.env
+.venv
+
+# Sessions
+sessions/
+*.session
+*.session-journal
+
+# Downloads (temporary media)
+downloads/
+
+# Logs
+logs/*.log
+
+# Environment / secrets
+config.env
+.env
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
