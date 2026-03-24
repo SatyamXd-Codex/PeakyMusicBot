@@ -28,7 +28,7 @@ async def _do_pause(client: Client, message: Message) -> None:
         await message.reply_text("❌ Nothing is playing right now.")
         return
     try:
-        await _get_call_py().pause_stream(chat_id)
+        await _get_call_py().pause(chat_id)
         state = db.get_active(chat_id)
         if state:
             state["status"] = "paused"
@@ -44,7 +44,7 @@ async def _do_resume(client: Client, message: Message) -> None:
         await message.reply_text("❌ Nothing is playing right now.")
         return
     try:
-        await _get_call_py().resume_stream(chat_id)
+        await _get_call_py().resume(chat_id)
         state = db.get_active(chat_id)
         if state:
             state["status"] = "playing"
@@ -69,7 +69,7 @@ async def _do_skip(client: Client, message: Message) -> None:
     else:
         db.remove_active(chat_id)
         try:
-            await _get_call_py().leave_group_call(chat_id)
+            await _get_call_py().leave_call(chat_id)
         except Exception:
             pass
         await message.reply_text("⏹ **Queue is empty. Stopped playback.**")
@@ -83,7 +83,7 @@ async def _do_stop(client: Client, message: Message) -> None:
     db.clear_queue(chat_id)
     db.remove_active(chat_id)
     try:
-        await _get_call_py().leave_group_call(chat_id)
+        await _get_call_py().leave_call(chat_id)
     except Exception:
         pass
     await message.reply_text("⏹ **Stopped and queue cleared.**")
