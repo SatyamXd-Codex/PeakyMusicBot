@@ -12,9 +12,8 @@ from pyrogram.types import (
     InlineKeyboardMarkup,
     Message,
 )
-from pytgcalls import PyTgCalls, idle
-from pytgcalls.types import AudioPiped, VideoPiped
-from pytgcalls.types.stream import StreamAudioEnded
+from pytgcalls import PyTgCalls, filters as tgfilters, idle
+from pytgcalls.types import MediaStream, StreamEnded
 
 from bot.helpers import database as db
 from bot.helpers.utils import (
@@ -57,8 +56,8 @@ def _player_buttons() -> InlineKeyboardMarkup:
 
 # ─── Stream ended callback ────────────────────────────────────────────────────
 
-@call_py.on_stream_end()
-async def _on_stream_end(client: PyTgCalls, update: StreamAudioEnded):
+@call_py.on_update(tgfilters.stream_end)
+async def _on_stream_end(client: PyTgCalls, update: StreamEnded):
     chat_id = update.chat_id
     next_track = db.remove_from_queue(chat_id)
     if next_track:
@@ -66,7 +65,7 @@ async def _on_stream_end(client: PyTgCalls, update: StreamAudioEnded):
     else:
         db.remove_active(chat_id)
         try:
-            await call_py.leave_group_call(chat_id)
+            await call_py.leave_call(chat_id)
         except Exception:
             pass
 
@@ -95,16 +94,14 @@ async def _start_stream(chat_id: int, track: dict) -> None:
 
     try:
         if stream_type == STREAM_TYPE_VIDEO:
-            await call_py.join_group_call(
+            await call_py.play(
                 chat_id,
-                VideoPiped(file_path),
-                stream_type=stream_type,
+                MediaStream(file_path),
             )
         else:
-            await call_py.join_group_call(
+            await call_py.play(
                 chat_id,
-                AudioPiped(file_path),
-                stream_type=stream_type,
+                MediaStream(file_path, video_flags=MediaStream.Flags.IGNORE),
             )
     except Exception as exc:
         logger.error("_start_stream error in %s: %s", chat_id, exc)
