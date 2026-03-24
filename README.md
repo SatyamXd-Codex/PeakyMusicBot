@@ -1,7 +1,7 @@
 # 🎵 Peaky Music Bot
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python" />
+  <img src="https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python" />
   <img src="https://img.shields.io/badge/Pyrogram-2.0-green?style=for-the-badge" />
   <img src="https://img.shields.io/badge/PyTgCalls-Latest-orange?style=for-the-badge" />
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" />
@@ -33,7 +33,7 @@
 - 🔘 **Inline Buttons** – pause, resume, skip from message
 - 📝 **Logging** – file + console logging
 - ⚡ **No Database** – fully in-memory, zero setup
-- 🐍 **Python 3.10+** – modern async, clean code
+- 🐍 **Python 3.11** – modern async, clean code (voice deps don’t ship wheels for 3.12 yet)
 
 ---
 
@@ -64,7 +64,7 @@
 
 ## ⚙️ Requirements
 
-- Python **3.10** or higher
+- Python **3.11.x** (pytgcalls/tgcalls wheels are not available for 3.12 yet)
 - **FFmpeg** installed on your system
 - A Telegram **Bot Token** (from [@BotFather](https://t.me/BotFather))
 - A Telegram **API ID & API Hash** (from [my.telegram.org](https://my.telegram.org))
