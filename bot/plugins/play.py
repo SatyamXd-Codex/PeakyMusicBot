@@ -13,7 +13,7 @@ from pyrogram.types import (
     Message,
 )
 from pytgcalls import PyTgCalls, idle
-from pytgcalls.types import AudioPiped, VideoPiped
+from pytgcalls.types.input_stream import AudioPiped, VideoPiped
 from pytgcalls.types.stream import StreamAudioEnded
 
 from bot.helpers import database as db
