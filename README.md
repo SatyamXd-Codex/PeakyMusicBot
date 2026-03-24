@@ -247,7 +247,7 @@ PeakyMusicBot/
 
 ## 👨‍💻 Developer
 
-**Satyam Xd** – [@eSportLeaker](https://t.me/eSportLeaker)
+**Satyam Xd**
 
 ---
 
