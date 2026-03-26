@@ -12,7 +12,7 @@ from pyrogram.types import (
     InlineKeyboardMarkup,
     Message,
 )
-from pytgcalls import PyTgCalls, filters as tgfilters, idle
+from pytgcalls import PyTgCalls, filters as tgfilters
 from pytgcalls.types import MediaStream, StreamEnded
 
 from bot.helpers import database as db
@@ -56,7 +56,7 @@ def _player_buttons() -> InlineKeyboardMarkup:
 
 # ─── Stream ended callback ────────────────────────────────────────────────────
 
-@call_py.on_update(tgfilters.stream_end)
+@call_py.on_update(tgfilters.stream_end())
 async def _on_stream_end(client: PyTgCalls, update: StreamEnded):
     chat_id = update.chat_id
     next_track = db.remove_from_queue(chat_id)
