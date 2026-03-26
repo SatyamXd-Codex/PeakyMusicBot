@@ -7,6 +7,10 @@ import logging
 import os
 import sys
 
+from dotenv import load_dotenv
+
+load_dotenv("config.env")
+
 # ─── Logging setup ─────────────────────────────────────────────────────────────
 os.makedirs("logs", exist_ok=True)
 
