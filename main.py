@@ -42,6 +42,21 @@ if _missing:
     logger.critical("Missing required environment variables: %s", ", ".join(_missing))
     sys.exit(1)
 
+# Validate STRING_SESSION length for pyrogram 2.x compatibility.
+# These are the only valid *encoded* (base64) string lengths pyrogram 2.x accepts:
+#   351 → old format  (decodes to 263 bytes)
+#   356 → old-64 format (decodes to 267 bytes, 64-bit user_id)
+#   362 → new format  (decodes to 271 bytes, pyrogram ≥ 2.0)
+_VALID_SESSION_STRING_LENGTHS = (351, 356, 362)
+if len(STRING_SESSION) not in _VALID_SESSION_STRING_LENGTHS:
+    logger.critical(
+        "STRING_SESSION has invalid length %d (expected one of %s). "
+        "Please regenerate it using generate_session.py.",
+        len(STRING_SESSION),
+        _VALID_SESSION_STRING_LENGTHS,
+    )
+    sys.exit(1)
+
 # ─── Import clients ────────────────────────────────────────────────────────────
 from bot import app, assistant
 from bot.plugins.play import call_py
@@ -49,7 +64,16 @@ from bot.plugins.play import call_py
 
 async def main():
     logger.info("Starting Peaky Music Bot…")
-    await assistant.start()
+    try:
+        await assistant.start()
+    except Exception as exc:
+        logger.critical(
+            "Failed to start assistant client: %s. "
+            "Make sure STRING_SESSION is a valid pyrogram 2.x session string "
+            "(generate one with: python3 generate_session.py).",
+            exc,
+        )
+        sys.exit(1)
     logger.info("Assistant client started.")
     await app.start()
     logger.info("Bot client started.")

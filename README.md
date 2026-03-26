@@ -173,21 +173,20 @@ SUDO_USERS=123456789,987654321
 
 ## 🔐 How to Generate a String Session
 
-The bot needs a **userbot assistant** account to join voice chats. Generate its string session with:
+The bot needs a **userbot assistant** account to join voice chats.
+A helper script is included to make this easy:
 
-```python
-from pyrogram import Client
-
-with Client("assistant", api_id=API_ID, api_hash=API_HASH) as app:
-    print(app.export_session_string())
+```bash
+python3 generate_session.py
 ```
 
-**Step-by-step:**
+Pyrogram will ask for your **phone number** and the **OTP**. Copy the printed
+value and store it as `STRING_SESSION` in `config.env` or as a GitHub secret.
 
-1. Open a Python shell or create a file with the code above.
-2. Fill in your `API_ID` and `API_HASH`.
-3. Run it – Pyrogram will ask for your **phone number**, then the **OTP**.
-4. Copy the printed string and set it as `STRING_SESSION`.
+> ⚠️ **The session string must be exactly 351, 356, or 362 characters long.**
+> These lengths correspond to old, old-64, and new (pyrogram ≥ 2.0) session formats
+> respectively. If you see a length error at startup, the session string is
+> corrupted or was generated with an incompatible library version.
 
 > ⚠️ **Never share your String Session with anyone!**
 
@@ -214,6 +213,7 @@ PeakyMusicBot/
 │   └── __init__.py          # Config from environment variables
 ├── logs/
 │   └── peaky.log            # Runtime log file
+├── generate_session.py      # One-time helper: generate STRING_SESSION
 ├── main.py                  # Entry point
 ├── requirements.txt
 ├── Procfile
