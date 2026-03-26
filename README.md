@@ -83,22 +83,21 @@
 sudo apt update && sudo apt upgrade -y
 
 # 2. Install required packages
-sudo apt install -y python3 python3-pip python3-venv ffmpeg git
+sudo apt install -y python3.11 python3-pip python3-venv ffmpeg git
 
 # 3. Clone the repository
 git clone https://github.com/SatyamXd-Codex/PeakyMusicBot.git
 cd PeakyMusicBot
 
 # 4. Create virtual environment (recommended)
-python3 -m venv venv
+python3.11 -m venv venv
 source venv/bin/activate
 
 # 5. Install Python dependencies
 pip install -r requirements.txt
 
 # 6. Set up environment variables
-cp config.env.example config.env   # or export variables directly
-nano config.env                    # Fill in your credentials
+nano config.env                    # Fill in your credentials (see Environment Variables section)
 
 # 7. Run the bot
 python3 main.py
@@ -149,7 +148,7 @@ python3 main.py
 
 ## 🔑 Environment Variables
 
-Create a `config.env` file or export these variables in your shell:
+Create a `config.env` file in the project root with the following contents:
 
 ```env
 # Telegram API credentials (from https://my.telegram.org)
@@ -165,9 +164,6 @@ STRING_SESSION=BQA...
 # Comma-separated Telegram user IDs for sudo access
 SUDO_USERS=123456789,987654321
 ```
-
-> 💡 **Tip:** To load from `config.env` automatically, install `python-dotenv`:
-> `pip install python-dotenv` and add `from dotenv import load_dotenv; load_dotenv("config.env")` to the top of `main.py`.
 
 ---
 
@@ -237,7 +233,7 @@ PeakyMusicBot/
 
 | Tool | Purpose |
 |------|---------|
-| [Python 3.10+](https://python.org) | Core language |
+| [Python 3.11](https://python.org) | Core language |
 | [Pyrogram](https://pyrogram.org) | Telegram MTProto client |
 | [PyTgCalls](https://pytgcalls.github.io) | Voice/Video chat streaming |
 | [yt-dlp](https://github.com/yt-dlp/yt-dlp) | YouTube audio/video fetching |
