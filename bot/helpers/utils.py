@@ -77,7 +77,7 @@ async def search_yt(query: str) -> Optional[str]:
     if YT_COOKIES:
         ydl_opts["cookiefile"] = YT_COOKIES
 
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = await loop.run_in_executor(
@@ -100,7 +100,7 @@ async def get_track_info(url: str) -> Optional[dict]:
     if YT_COOKIES:
         ydl_opts["cookiefile"] = YT_COOKIES
 
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = await loop.run_in_executor(
@@ -118,7 +118,7 @@ async def download_audio(url: str, chat_id: int) -> Tuple[Optional[str], Optiona
     os.makedirs(out_dir, exist_ok=True)
     template = os.path.join(out_dir, "%(id)s.%(ext)s")
     opts = _build_ydl_opts(audio=True, output_template=template)
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     try:
         with yt_dlp.YoutubeDL(opts) as ydl:
             info = await loop.run_in_executor(
@@ -148,13 +148,16 @@ async def download_video(url: str, chat_id: int) -> Tuple[Optional[str], Optiona
     os.makedirs(out_dir, exist_ok=True)
     template = os.path.join(out_dir, "%(id)s.%(ext)s")
     opts = _build_ydl_opts(audio=False, output_template=template)
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     try:
         with yt_dlp.YoutubeDL(opts) as ydl:
             info = await loop.run_in_executor(
                 None, lambda: ydl.extract_info(url, download=True)
             )
-        path = ydl.prepare_filename(info)
+            if not info:
+                logger.error("download_video: yt-dlp returned no info for %s", url)
+                return None, None
+            path = ydl.prepare_filename(info)
         # yt-dlp may merge into mkv; find the actual file by trying known extensions
         base, _ = os.path.splitext(path)
         for ext in ("mp4", "mkv", "webm"):
